@@ -25,7 +25,7 @@ $(call inherit-product, vendor/cm/config/common_full_phone.mk)
 
 PRODUCT_NAME := cm_rio
 PRODUCT_DEVICE := rio
-PRODUCT_BRAND := huawei
+PRODUCT_BRAND := Huawei
 PRODUCT_MANUFACTURER := HUAWEI
-PRODUCT_MODEL := G8-L01
+PRODUCT_MODEL := HUAWEI RIO-L01
 

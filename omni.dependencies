@@ -2,13 +2,5 @@
   {
     "repository": "android_external_busybox",
     "target_path": "external/busybox"
-  },
-  {
-    "repository": "android_external_toybox",
-    "target_path": "external/toybox"
-  },
-  {
-    "repository": "android_system_core_toolbox",
-    "target_path": "system/core/toolbox"
   }
 ]

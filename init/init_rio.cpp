@@ -1,6 +1,5 @@
 /*
-   Copyright (c) 2014, The Linux Foundation. All rights reserved.
-   Copyright (C) 2016 @surdu_petru
+   Copyright (c) 2016, The CyanogenMod Project
    Redistribution and use in source and binary forms, with or without
    modification, are permitted provided that the following conditions are
    met:
@@ -26,84 +25,62 @@
    IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
+#include <cstdlib>
+#include <fstream>
+#include <string>
 
 #include "vendor_init.h"
 #include "property_service.h"
 #include "log.h"
 #include "util.h"
 
-#include "init_msm.h"
+#include "init_msm8916.h"
 
-void init_msm_properties(unsigned long msm_id, unsigned long msm_ver, char *board_type)
+void init_target_properties()
 {
     char platform[PROP_VALUE_MAX];
-    char model[110];
-    FILE* fp;
+    std::ifstream fin;
+    std::string buf;
     int rc;
 
-    UNUSED(msm_id);
-    UNUSED(msm_ver);
-    UNUSED(board_type);
-
     rc = property_get("ro.board.platform", platform);
-    if (!rc || !ISMATCH(platform, ANDROID_TARGET))
+    if (!rc || strncmp(platform, "msm8916", PROP_VALUE_MAX))
         return;
 
-    fp = fopen("/proc/app_info", "rb");
-    while (fgets(model, 100, fp))
-        if (strstr(model, "huawei_fac_product_name") != NULL)
+    fin.open("/proc/app_info");
+    while (getline(fin, buf))
+        if (buf.find("huawei_fac_product_name") != std::string::npos)
             break;
+    fin.close();
 
-    if (strstr(model, "RIO-L01") != NULL) {
+    if (buf.find("RIO-L01") != std::string::npos) {
         property_set("ro.product.model", "HUAWEI RIO-L01");
-        property_set("ro.product.name", "RIO-L01");
         property_set("ro.product.device", "hwRIO-L01");
         property_set("ro.build.product", "RIO-L01");
-        property_set("persist.radio.multisim.config", "dsds");
-        property_set("persist.dsds.enabled", "true");
-        property_set("ro.telephony.default_network", "22");
-        property_set("ro.config.dsds_mode", "umts_gsm");
-        property_set("ro.ril.multi_rat_capable","true");
-        property_set("ro.sf.lcd_density","480");
-        property_set("ro.build.description", "RIO-L01-user 5.0 GRJ90 C432B180 release-keys");
-        property_set("ro.build.fingerprint", "HUAWEI/RIO-L01/hwRIO-L01:5.1/HuaweiRIO-L01/C432B180:user/release-keys");
     }
-    else if (strstr(model, "RIO-L02") != NULL) {
+    else if (buf.find("RIO-L02") != std::string::npos) {
         property_set("ro.product.model", "HUAWEI RIO-L02");
-        property_set("ro.product.name", "RIO-L02");
         property_set("ro.product.device", "hwRIO-L02");
         property_set("ro.build.product", "RIO-L02");
-        property_set("ro.sf.lcd_density","480");
     }
-    else if (strstr(model, "RIO-L03") != NULL) {
+    else if (buf.find("RIO-L03") != std::string::npos) {
         property_set("ro.product.model", "HUAWEI RIO-L03");
-        property_set("ro.product.name", "RIO-L03");
         property_set("ro.product.device", "hwRIO-L03");
         property_set("ro.build.product", "RIO-L03");
-        property_set("ro.sf.lcd_density","480");
     }
-    else if (strstr(model, "RIO-AL00") != NULL) {
+    else if (buf.find("RIO-AL00") != std::string::npos) {
         property_set("ro.product.model", "HUAWEI RIO-AL00");
-        property_set("ro.product.name", "RIO-AL00");
         property_set("ro.product.device", "hwRIO-AL00");
         property_set("ro.build.product", "RIO-AL00");
-        property_set("ro.sf.lcd_density","480");
     }
-    else if (strstr(model, "RIO-CL00") != NULL) {
+    else if (buf.find("RIO-CL00") != std::string::npos) {
         property_set("ro.product.model", "HUAWEI RIO-CL00");
-        property_set("ro.product.name", "RIO-CL00");
         property_set("ro.product.device", "hwRIO-CL00");
         property_set("ro.build.product", "RIO-CL00");
-        property_set("ro.sf.lcd_density","480");
     }
-    else if (strstr(model, "RIO-TL00") != NULL) {
+    else if (buf.find("RIO-TL00") != std::string::npos) {
         property_set("ro.product.model", "HUAWEI RIO-TL00");
-        property_set("ro.product.name", "RIO-TL00");
         property_set("ro.product.device", "hwRIO-TL00");
         property_set("ro.build.product", "RIO-TL00");
-        property_set("ro.sf.lcd_density","480");
     }
 }
